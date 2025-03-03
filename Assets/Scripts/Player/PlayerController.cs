@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 1f;
-    [SerializeField] private float runSpeed = 2f;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float runSpeed;
 
     private PlayerControls playerControls;
     private Vector2 moveInput;
@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
 
     private bool isRunning;
-    private float currentMoveSpeed = 1f;
+    private float currentMoveSpeed;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        moveSpeed = currentMoveSpeed;
+        currentMoveSpeed = moveSpeed;
     }
 
     private void OnEnable()
