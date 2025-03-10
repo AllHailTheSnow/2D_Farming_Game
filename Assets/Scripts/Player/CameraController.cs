@@ -1,38 +1,23 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraController : Singleton<CameraController>
 {
-    [SerializeField] private Transform clampMin, clampMax;
+    private CinemachineVirtualCamera cinemachineVirtualCamera;
 
-    private Transform target;   
-    private Camera cam;
-    private float halfWidth, halfHeight;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        cam = GetComponent<Camera>();
-        halfHeight = cam.orthographicSize;
-        halfWidth = cam.orthographicSize * cam.aspect;
-
-        target = FindAnyObjectByType<PlayerController>().transform;
-
-        clampMin.SetParent(null);
-        clampMax.SetParent(null);
+        //set the player follow camera
+        SetPlayerFollowCamera();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetPlayerFollowCamera()
     {
-        transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
-
-        Vector3 clampedPos = transform.position;
-
-        clampedPos.x = Mathf.Clamp(clampedPos.x, clampMin.position.x + halfWidth, clampMax.position.x - halfWidth);
-        clampedPos.y = Mathf.Clamp(clampedPos.y, clampMin.position.y + halfHeight, clampMax.position.y - halfHeight);
-
-        transform.position = clampedPos;
+        //find the cinemachine virtual camera and set the follow target to the player
+        cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        cinemachineVirtualCamera.Follow = PlayerController.Instance.transform;
     }
+
 }

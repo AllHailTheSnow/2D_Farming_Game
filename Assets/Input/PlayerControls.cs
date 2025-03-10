@@ -114,6 +114,129 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Action"",
+            ""id"": ""f2da884d-ce27-4b2f-999b-90fbbc744b78"",
+            ""actions"": [
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""9256eb68-e496-40fd-84f8-3a483a74d7ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SwapTool"",
+                    ""type"": ""Button"",
+                    ""id"": ""653a43e1-e198-43be-aaa7-53b6ab36351c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""type"": ""Value"",
+                    ""id"": ""46733764-c64e-49e8-b046-e7691a2d2da2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""db05ad27-ff5b-4e8f-b958-480b1c1390a8"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4c6d1b4-22bd-4bf8-abba-be037166a125"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e7f8518-59fa-43b1-aa81-3abd4134f046"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapTool"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b31e9805-ce86-47f3-9dd1-be3a2a5edfcd"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale"",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a3da349-fa6c-4111-8af1-59afa6c6fb5a"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=2)"",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd4f0d45-239a-4c90-a501-1f3278b7b076"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=3)"",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6a779c2-dac3-473e-90b1-aeac094e0105"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=4)"",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ec6ef62-39e7-484e-9b95-a5323c0aa6e7"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=5)"",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -122,6 +245,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
         m_Movement_Run = m_Movement.FindAction("Run", throwIfNotFound: true);
+        // Action
+        m_Action = asset.FindActionMap("Action", throwIfNotFound: true);
+        m_Action_Interact = m_Action.FindAction("Interact", throwIfNotFound: true);
+        m_Action_SwapTool = m_Action.FindAction("SwapTool", throwIfNotFound: true);
+        m_Action_Keyboard = m_Action.FindAction("Keyboard", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -233,9 +361,77 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Action
+    private readonly InputActionMap m_Action;
+    private List<IActionActions> m_ActionActionsCallbackInterfaces = new List<IActionActions>();
+    private readonly InputAction m_Action_Interact;
+    private readonly InputAction m_Action_SwapTool;
+    private readonly InputAction m_Action_Keyboard;
+    public struct ActionActions
+    {
+        private @PlayerControls m_Wrapper;
+        public ActionActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Interact => m_Wrapper.m_Action_Interact;
+        public InputAction @SwapTool => m_Wrapper.m_Action_SwapTool;
+        public InputAction @Keyboard => m_Wrapper.m_Action_Keyboard;
+        public InputActionMap Get() { return m_Wrapper.m_Action; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ActionActions set) { return set.Get(); }
+        public void AddCallbacks(IActionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ActionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ActionActionsCallbackInterfaces.Add(instance);
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @SwapTool.started += instance.OnSwapTool;
+            @SwapTool.performed += instance.OnSwapTool;
+            @SwapTool.canceled += instance.OnSwapTool;
+            @Keyboard.started += instance.OnKeyboard;
+            @Keyboard.performed += instance.OnKeyboard;
+            @Keyboard.canceled += instance.OnKeyboard;
+        }
+
+        private void UnregisterCallbacks(IActionActions instance)
+        {
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @SwapTool.started -= instance.OnSwapTool;
+            @SwapTool.performed -= instance.OnSwapTool;
+            @SwapTool.canceled -= instance.OnSwapTool;
+            @Keyboard.started -= instance.OnKeyboard;
+            @Keyboard.performed -= instance.OnKeyboard;
+            @Keyboard.canceled -= instance.OnKeyboard;
+        }
+
+        public void RemoveCallbacks(IActionActions instance)
+        {
+            if (m_Wrapper.m_ActionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IActionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ActionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ActionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ActionActions @Action => new ActionActions(this);
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+    }
+    public interface IActionActions
+    {
+        void OnInteract(InputAction.CallbackContext context);
+        void OnSwapTool(InputAction.CallbackContext context);
+        void OnKeyboard(InputAction.CallbackContext context);
     }
 }
